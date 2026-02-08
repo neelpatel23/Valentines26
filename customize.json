@@ -1,6 +1,6 @@
 {
-  "name": "xyz",
-  "greetingText": "I really like your name btw!",
-  "wishText": "Aankhon me teri Ajab si Ajab si aadae hai, Dil ko bna de malang ye teri wo hawayeinn hai",
-  "imagePath": "img/vector.jpg"
+  "nicknames": ["Bubs", "Ria", "Riu", "Baby", "Gorgeous", "My Riu", "My Love", "My Life", "My Everything", "My World", "My Heart", "My Soul"],
+  "greetingText": "I love your name — and everything about you: your hair, your nose, your smile, the way you laugh, and every little thing that makes you you.",
+  "wishText": "I love you so much Riu, I really do. I'm so lucky to have you in my life.",
+  "imagePath": "img/riu.jpg"
 }

@@ -27,10 +27,52 @@ const animationTimeline = () => {
   };
 
   const tl = new TimelineMax();
+  const valentineButtons = document.getElementById("valentineButtons");
+  const btnYes = document.getElementById("btnYes");
+  const btnNo = document.getElementById("btnNo");
+  const yayMessage = document.getElementById("yayMessage");
+  let yesScale = 1;
 
-  tl.to(".container", 0.1, {
-    visibility: "visible",
-  })
+  const sixSection = document.querySelector(".six");
+  const resetValentineButtons = () => {
+    if (valentineButtons) valentineButtons.classList.remove("visible");
+    if (yayMessage) yayMessage.classList.remove("visible");
+    yesScale = 1;
+    if (btnYes) TweenMax.set(btnYes, { scale: 1 });
+    if (sixSection) sixSection.style.zIndex = "";
+  };
+
+  const showValentineButtons = () => {
+    tl.pause();
+    yesScale = 1;
+    if (btnYes) TweenMax.set(btnYes, { scale: 1 });
+    if (sixSection) sixSection.style.zIndex = "20";
+    if (valentineButtons) valentineButtons.classList.add("visible");
+  };
+
+  if (btnNo) {
+    btnNo.addEventListener("click", () => {
+      yesScale += 0.25;
+      TweenMax.to(btnYes, 0.3, { scale: yesScale, ease: Power2.easeOut });
+    });
+  }
+  if (btnYes) {
+    btnYes.addEventListener("click", () => {
+      if (valentineButtons) valentineButtons.classList.remove("visible");
+      if (yayMessage) yayMessage.classList.add("visible");
+      TweenMax.from(yayMessage, 0.5, {
+        scale: 0,
+        opacity: 0,
+        ease: Back.easeOut.config(1.7),
+      });
+      setTimeout(() => tl.play(), 1500);
+    });
+  }
+
+  tl.add(resetValentineButtons)
+    .to(".container", 0.1, {
+      visibility: "visible",
+    })
     .from(".one", 0.7, {
       opacity: 0,
       y: 10,
@@ -46,7 +88,7 @@ const animationTimeline = () => {
         opacity: 0,
         y: 10,
       },
-      "+=2.5"
+      "+=10"
     )
     .to(
       ".two",
@@ -238,6 +280,8 @@ const animationTimeline = () => {
       },
       "party"
     )
+    .to({}, 0.8, {})
+    .add(showValentineButtons)
     .staggerTo(
       ".eight svg",
       1.5,
@@ -275,19 +319,41 @@ const animationTimeline = () => {
   });
 };
 
+// Cycle through nicknames next to "Hey" (e.g. Hey Bubs → Hey Ria → …)
+let nameCycleInterval = null;
+const startNameCycle = (nicknames) => {
+  if (!Array.isArray(nicknames) || nicknames.length === 0) return;
+  const nameEl = document.getElementById("name");
+  if (!nameEl) return;
+  let index = 0;
+  nameEl.innerText = nicknames[0];
+  if (nameCycleInterval) clearInterval(nameCycleInterval);
+  nameCycleInterval = setInterval(() => {
+    index = (index + 1) % nicknames.length;
+    nameEl.innerText = nicknames[index];
+  }, 1250);
+};
+
 // Import the data to customize and insert them into page
 const fetchData = () => {
   fetch("customize.json")
     .then((data) => data.json())
     .then((data) => {
-      Object.keys(data).map((customData) => {
-        if (data[customData] !== "") {
+      // If we have nicknames, use cycling; otherwise fall back to single "name"
+      if (data.nicknames && Array.isArray(data.nicknames)) {
+        startNameCycle(data.nicknames);
+      }
+      Object.keys(data).forEach((customData) => {
+        if (customData === "nicknames") return; // already handled above
+        if (customData === "name" && data.nicknames) return; // use nicknames instead
+        const value = data[customData];
+        if (value !== "" && value !== undefined && value !== null) {
           if (customData === "imagePath") {
-            document
-              .getElementById(customData)
-              .setAttribute("src", data[customData]);
+            const el = document.getElementById(customData);
+            if (el) el.setAttribute("src", value);
           } else {
-            document.getElementById(customData).innerText = data[customData];
+            const el = document.getElementById(customData);
+            if (el) el.innerText = value;
           }
         }
       });

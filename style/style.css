@@ -130,6 +130,59 @@ body {
   /* transform: scale(0.1); */
 }
 
+.valentine-buttons {
+  display: none;
+  position: relative;
+  z-index: 5;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.valentine-buttons.visible {
+  display: flex;
+}
+
+.btn-valentine {
+  padding: 0.6rem 1.8rem;
+  font-size: 1.25rem;
+  font-family: "Work Sans", sans-serif;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-yes {
+  background: #ff69b4;
+  color: #fff;
+}
+
+.btn-no {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-valentine:hover {
+  transform: scale(1.05);
+}
+
+.yay-message {
+  display: none;
+  position: relative;
+  z-index: 5;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff69b4;
+  margin: 1.5rem 0 0;
+}
+
+.yay-message.visible {
+  display: block;
+}
+
 .baloons img {
   display: inline-block;
   position: absolute;
